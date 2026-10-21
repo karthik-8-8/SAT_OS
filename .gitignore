@@ -1,0 +1,14 @@
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+.ninja_*
+*.o
+*.elf
+*.bin
+*.uf2
+*.map
+__pycache__/
+*.py[cod]
+.venv/
+venv/

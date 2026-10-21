@@ -1,0 +1,9 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#define SYSTEM_CLK_HZ 125000000UL
+#define UART_DEFAULT_BARD 12500UL
+
+#define LED_PIN 25
+
+#endif

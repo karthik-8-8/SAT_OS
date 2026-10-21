@@ -1,0 +1,208 @@
+Sure — if you mean the **Raspberry Pi Pico board based on the RP2040**, here are the main characteristics in a lab-record-friendly format.
+
+### Characteristics of Raspberry Pi Pico (RP2040)
+
+| Characteristic            | Specification                     |
+| ------------------------- | --------------------------------- |
+| **Microcontroller**       | Raspberry Pi RP2040               |
+| **CPU**                   | Dual-core ARM Cortex-M0+          |
+| **Maximum Clock Speed**   | Up to 133 MHz                     |
+| **SRAM**                  | 264 KB                            |
+| **On-board Flash**        | 2 MB                              |
+| **GPIO Pins**             | 26 multifunction GPIO             |
+| **Analog Inputs**         | 3 × 12-bit ADC                    |
+| **ADC Resolution**        | 12-bit                            |
+| **PWM**                   | 16 PWM channels                   |
+| **UART**                  | 2                                 |
+| **SPI**                   | 2                                 |
+| **I²C**                   | 2                                 |
+| **Programmable I/O**      | 8 PIO state machines              |
+| **Operating Voltage**     | 3.3 V logic                       |
+| **Power Input**           | 1.8–5.5 V via VSYS                |
+| **USB**                   | USB 1.1, Micro-USB                |
+| **Programming**           | USB mass-storage / UF2 bootloader |
+| **Dimensions**            | Approximately 51 × 21 mm          |
+| **Operating Temperature** | −20°C to +85°C                    |
+| **Programming Languages** | C/C++, MicroPython, CircuitPython |
+| **LED**                   | On-board user LED                 |
+| **Low-Power Modes**       | Supported                         |
+| **Wireless**              | Not available on standard Pico    |
+| **Bluetooth**             | Not available on standard Pico    |
+| **Wi-Fi**                 | Not available on standard Pico    |
+
+### Important Features
+
+* **Dual-core ARM Cortex-M0+** processor for efficient processing.
+* **264 KB SRAM** for temporary data and program execution.
+* **2 MB Flash memory** for storing programs.
+* **26 GPIO pins** for connecting sensors and external devices.
+* Built-in **ADC** for reading analog sensor signals.
+* Supports **PWM** for motor control, LED brightness, servo control, etc.
+* Supports **I²C, SPI, and UART** for communication with sensors and modules such as the **BMP280 and MPU6050**.
+* **PIO (Programmable I/O)** allows custom high-speed digital interfaces.
+* Can be programmed easily using **MicroPython or C/C++**.
+* Compact and inexpensive, making it suitable for **embedded systems, IoT, robotics, automation, and sensor-based projects**.
+
+**Note:** The **Raspberry Pi Pico W** is a different version that adds **2.4 GHz Wi-Fi and Bluetooth/BLE**. The standard Pico does not have wireless connectivity.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Theory of Working of MQ-2 Gas Sensor
+
+The **MQ-2 gas sensor** is a semiconductor-type gas sensor used to detect the presence and approximate concentration of combustible and reducing gases such as **LPG, propane, methane, hydrogen, smoke, and alcohol vapors**.
+
+#### Working Principle
+
+The MQ-2 sensor contains a sensing material made primarily of **tin dioxide (SnO₂)**. It also has a small **heater coil** that keeps the sensing material at a suitable operating temperature.
+
+When clean air is present, oxygen molecules are adsorbed onto the surface of the SnO₂ material. These oxygen molecules capture electrons from the sensing material, which increases its electrical resistance.
+
+When a combustible or reducing gas comes into contact with the heated SnO₂ surface, it reacts with the adsorbed oxygen. This releases electrons back into the sensing material, causing its **electrical resistance to decrease**.
+
+The change in resistance is measured as a change in the sensor's output voltage. A microcontroller such as Arduino can read this voltage and determine whether the concentration of gas has increased or decreased.
+
+The sensor is commonly connected as a **voltage divider**, where the sensing resistance (R_S) changes according to the gas concentration:
+
+[
+V_{OUT}=V_C\frac{R_L}{R_S+R_L}
+]
+
+where:
+
+* (V_{OUT}) = sensor output voltage
+* (V_C) = supply voltage
+* (R_L) = load resistance
+* (R_S) = resistance of the gas-sensitive material
+
+As the concentration of combustible gas increases, (R_S) generally decreases, resulting in an increase in the output voltage.
+
+### Working Sequence
+
+**Gas enters the sensor → gas reacts with heated SnO₂ → sensor resistance changes → output voltage changes → microcontroller reads the voltage → gas presence/concentration is estimated.**
+
+The MQ-2 is widely used in **gas leakage detection, smoke detection, air-quality monitoring, and safety systems**. It is important to note that the MQ-2 is best suited for **relative gas detection**, and accurate concentration measurements require proper calibration.
+
+
+
+
+
+
+
+
+
+
+### Theory of Working of BMP280
+
+The **BMP280** is a digital **barometric pressure and temperature sensor** developed by Bosch. It measures atmospheric pressure and temperature and can be used to determine **altitude** and changes in atmospheric conditions.
+
+#### Working Principle
+
+The BMP280 works mainly using a **MEMS piezoresistive pressure-sensing element**. When atmospheric pressure acts on the sensor's tiny diaphragm, the diaphragm undergoes a small deformation. This deformation changes the electrical resistance of piezoresistive elements on the diaphragm.
+
+The sensor converts this change in resistance into an electrical signal. An internal **ADC (Analog-to-Digital Converter)** digitizes the signal, and the BMP280's internal processing circuitry applies calibration data stored in the sensor.
+
+The BMP280 also contains a temperature-sensing element. The measured temperature is used to compensate for the temperature dependence of the pressure sensor, improving measurement accuracy.
+
+The processed pressure and temperature values are made available digitally through **I²C or SPI communication**.
+
+#### Pressure-to-Altitude Measurement
+
+Atmospheric pressure decreases as altitude increases. Therefore, the BMP280 can estimate altitude from measured pressure using the barometric relationship:
+
+[
+h = 44330\left[1-\left(\frac{P}{P_0}\right)^{1/5.255}\right]
+]
+
+where:
+
+* (h) = altitude in metres
+* (P) = measured atmospheric pressure
+* (P_0) = reference pressure at sea level
+
+Thus, the BMP280 can be used in applications such as **altimeters, weather stations, drones, navigation systems, and indoor/outdoor monitoring systems**.
+
+**In short:** Atmospheric pressure → MEMS diaphragm deformation → resistance change → ADC conversion → temperature compensation/calibration → digital pressure and temperature output.
+
+
+BMP280
+┌─────────────────────┐
+│ Register 0xD0       │ → Chip ID
+│ Register 0x88       │ → Calibration
+│ Register 0xF4       │ → ctrl_meas
+│ Register 0xF5       │ → config
+│ Register 0xF7       │ → Pressure data
+│ Register 0xFA       │ → Temperature data
+│ ...                 │
+└─────────────────────┘
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Theory of Working of MPU6050
+
+The **MPU6050** is a **6-axis MEMS motion sensor** that combines a **3-axis accelerometer** and a **3-axis gyroscope** in a single device. It is commonly used in robotics, drones, wearable devices, balancing systems, and motion-detection applications.
+
+#### Working Principle
+
+The MPU6050 uses **MEMS (Micro-Electro-Mechanical Systems)** technology to detect motion.
+
+**1. Accelerometer:**
+The 3-axis accelerometer measures acceleration along the **X, Y, and Z axes**. Inside the sensor, tiny mechanical structures move when the sensor experiences acceleration or changes in orientation. This movement causes a change in capacitance, which is converted into a digital acceleration value.
+
+The accelerometer can also detect the effect of **gravity**, allowing the orientation or tilt of the device to be estimated.
+
+**2. Gyroscope:**
+The 3-axis gyroscope measures the **angular velocity** or rate of rotation around the X, Y, and Z axes. It uses a vibrating MEMS structure based on the **Coriolis effect**. When the sensor rotates, the vibrating structure experiences a force that causes a measurable displacement. This displacement is converted into angular velocity.
+
+**3. Digital Processing:**
+The signals from the accelerometer and gyroscope are converted into digital values using internal ADCs. The MPU6050 provides these values to a microcontroller through the **I²C communication interface**.
+
+The sensor also contains an internal **Digital Motion Processor (DMP)** that can perform motion-processing operations and help calculate orientation-related information.
+
+### Working Sequence
+
+**Motion/rotation occurs → MEMS structures move → capacitance changes → electrical signals are generated → signals are converted to digital values → data is transmitted through I²C → microcontroller processes the motion data.**
+
+### Applications
+
+The MPU6050 is commonly used in:
+
+* Robotics and robot balancing
+* Drone stabilization
+* Motion and gesture detection
+* Inertial measurement systems
+* Wearable devices
+* Vehicle and object orientation detection
+* Gaming controllers
+
+**In short:** The accelerometer measures **linear acceleration**, while the gyroscope measures **angular velocity**. By combining both measurements, the MPU6050 can provide information about the **motion and orientation** of an object.
